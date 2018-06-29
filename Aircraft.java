@@ -18,16 +18,16 @@ public class Aircraft implements Runnable {
   }
 
   public void run() {
-    // if (random.nextBoolean()) {
     try {
-      this.runway.depart(id);
+      if (random.nextBoolean()) {
+        this.runway.depart(id);
+      } else {
+        this.runway.land(id);
+      }
     } catch (Exception e) {
       System.out.println(e);
     }
 
-    // } else {
-    //   this.runway.land(id);
-    // }
   }
 
 }

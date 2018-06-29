@@ -33,18 +33,30 @@ public class Runway {
       }
 
       departCount += 1;
-      isDeparting = false;
-      canDepart.signal();
+      isDeparting = false; canDepart.signal();
     } finally {
       lock.unlock();
     }
   }
 
-  public void land(int aircraftID) {
+  public void land(int aircraftID) throws InterruptedException {
     lock.lock();
 
     try {
+      while (isLanding || isDeparting)
+        canDepart.await();
+
+      isLanding = true;
       printLanding(aircraftID);
+      try {
+        Thread.sleep(10000);
+      } catch (Exception e) {
+        System.out.println(e);
+      }
+
+      landingCount += 1;
+      isLanding = false;
+      canDepart.signal();
     } finally {
       lock.unlock();
     }
@@ -63,14 +75,14 @@ public class Runway {
   }
 
   public void printDepart(int id) {
-    System.out.println("Aircraft_" + id +
-        " is departing in " + name + " at " +
+    System.out.println("Aircraft " + id +
+        " is departing from " + name + " at " +
         Util.getCurrentTimestamp());
   }
 
   public void printLanding(int id) {
-    System.out.println("Aircraft_" + id +
-        " is landing " + name + " at " +
+    System.out.println("Aircraft " + id +
+        " is landing on     " + name + " at " +
         Util.getCurrentTimestamp());
   }
 

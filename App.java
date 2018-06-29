@@ -10,7 +10,7 @@ public class App {
     ArrayList<Thread>   threads   = new ArrayList<Thread>();
 
     for (int i = 0; i < runwayNumber; i++) {
-      runways.add(new Runway("Runway_" + i));
+      runways.add(new Runway("Runway " + i));
     }
     for (int i = 0; i < aircraftNumber; i++) {
       int index = i % runwayNumber;
