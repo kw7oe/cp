@@ -45,9 +45,4 @@ public class App {
 
   }
 
-  // To generate random index for runway
-  public static int randomIndex(int max) {
-    return (int)(Math.random() * max);
-  }
-
 }

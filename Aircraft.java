@@ -9,12 +9,8 @@ public class Aircraft implements Runnable {
     this.id = id;
     this.runway = runway;
     this.random = new Random();
-    System.out.println("Aircarft_" + id + " is created at " +
+    System.out.println("Aircarft " + id + " is created at " +
         Util.getCurrentTimestamp());
-  }
-
-  public void setRunway(Runway runway) {
-    this.runway = runway;
   }
 
   public void run() {
