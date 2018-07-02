@@ -16,6 +16,7 @@ public class Runway {
     this.canDepart = lock.newCondition();
   }
 
+  // Depart
   public void depart(int aircraftID) throws InterruptedException {
     lock.lock();
 
@@ -23,12 +24,14 @@ public class Runway {
       while (!isAvailable)
         canDepart.await();
 
+      // Departing
       printTakeover(aircraftID, " for departing");
       isAvailable = false;
 
       try {
         int departingTimeTaken = 5000;
 
+        // If no other aircraft is taking off
         if (lock.getQueueLength() == 0) {
           departingTimeTaken += randomMs();
         }
@@ -38,15 +41,18 @@ public class Runway {
         System.out.println(e);
       }
 
+      // Departed
       printDepart(aircraftID);
       departCount += 1;
       isAvailable = true;
       canDepart.signal();
+
     } finally {
       lock.unlock();
     }
   }
 
+  // Land
   public void land(int aircraftID) throws InterruptedException {
     lock.lock();
 
@@ -54,6 +60,7 @@ public class Runway {
       while (!isAvailable)
         canDepart.await();
 
+      // Landing
       printTakeover(aircraftID, " for landing");
       isAvailable = false;
       try {
@@ -62,6 +69,7 @@ public class Runway {
         System.out.println(e);
       }
 
+      // Landed
       printLanding(aircraftID);
       landingCount += 1;
       isAvailable = true;
@@ -90,26 +98,34 @@ public class Runway {
   }
 
   public void printTakeover(int id, String action) {
-    if (action == " for departing") {
-      action = Util.green(action);
-    } else {
-      action = Util.red(action);
-    }
+    // For colored output, only works in terminal that support ASCI escaped
+    // code, such as bash. Does not work in Windows cmd.
 
-    printWithTime(id, Util.blue(" is taking the     "), action);
+    // if (action == " for departing") {
+    //   action = Util.green(action);
+    // } else {
+    //   action = Util.red(action);
+    // }
+    // printWithTime(id, Util.blue(" is taking the     "), action);
+
+    printWithTime(id, " is taking the     ", action);
   }
 
   public void printDepart(int id) {
-    printWithTime(id, Util.green(" departed from     "), "");
+    // Colored output
+    // printWithTime(id, Util.green(" departed from     "), "");
+
+    printWithTime(id, " departed from     ", "");
   }
 
   public void printLanding(int id) {
-    printWithTime(id, Util.red(" landed on         "), "");
+    // Colored output
+    // printWithTime(id, Util.red(" landed on         "), "");
+
+    printWithTime(id, " landed on         ", "");
   }
 
   public int randomMs() {
     return (int)(Math.random() * 5 * 1000);
   }
-
-
 }

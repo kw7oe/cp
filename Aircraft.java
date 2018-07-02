@@ -15,6 +15,7 @@ public class Aircraft implements Runnable {
 
   public void run() {
     try {
+      // Randomly decide whether to depart or land
       if (random.nextBoolean()) {
         this.runway.depart(id);
       } else {
